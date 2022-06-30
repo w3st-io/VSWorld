@@ -108,16 +108,16 @@ contract VSWorldRobotz is
 		return _mintPrice;
 	}
 
-    function reserveTokens() public onlyOwner {        
-        for (uint i = 0; i < 30; i++) {
+	function reserveTokens() public onlyOwner {        
+		for (uint i = 0; i < 30; i++) {
 			if (totalSupply() < MAX_ROBOTS) {
 				_mint(_treasury, _tokenIdTracker.current());
 
 				// Increment token id
 				_tokenIdTracker.increment();
 			}
-        }
-    }
+		}
+	}
 
 	function setMint(bool state) external onlyOwner {
 		_openMint = state;
