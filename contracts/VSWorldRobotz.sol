@@ -85,20 +85,20 @@ contract VSWorldRobotz is
 
 	/* [FUNCTIONS][SELF-IMPLMENTATIONS] */
 	function setBaseURI(string memory baseTokenURI) external onlyOwner {
-        _baseTokenURI = baseTokenURI;
-    }
+		_baseTokenURI = baseTokenURI;
+	}
 
-	
+
 	/* [FUNCTIONS] */
 	function withdrawToTreasury() public onlyOwner {
-        uint balance = address(this).balance;
-        
+		uint balance = address(this).balance;
+		
 		payable(_treasury).transfer(balance);
-    }
+	}
 
 	function setProvenanceHash(string memory provenanceHash) public onlyOwner {
-        PROVENANCE = provenanceHash;
-    }
+		PROVENANCE = provenanceHash;
+	}
 
 	function setMintPrice(uint mintPrice) public onlyOwner {
 		_mintPrice = mintPrice;
