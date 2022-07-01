@@ -58,6 +58,20 @@ contract VSWorldRobotz is
 		_setupRole(DEFAULT_ADMIN_ROLE, treasury);
 	}
 
+	/* [MODIFIERS] */
+	modifier mintCompliance(address[] memory toSend) {
+		require(tx.origin == msg.sender, "Wrong Caller");
+		require(_openMint == true, "Minting closed");
+		require(toSend.length <= 20, "Can only mint 20 tokens at a time");
+		require(msg.value == _mintPrice * toSend.length, "Invalid msg.value");
+		require(
+			_tokenIdTracker.current() + toSend.length <= MAX_ROBOTS,
+			"Purchase would exceed max supply"
+		);
+
+		_;
+	}
+
 
 	/* [FUNCTIONS][OVERRIDE][REQUIRED] */
 	function _burn(uint256 tokenId) internal virtual override(ERC721) {
@@ -130,15 +144,7 @@ contract VSWorldRobotz is
 		_openMint = state;
 	}
 
-	function mint(address[] memory toSend) public payable onlyOwner {
-		require(_openMint == true, "Minting closed");
-		require(toSend.length <= 20, "Can only mint 20 tokens at a time");
-		require(
-			_tokenIdTracker.current() + toSend.length <= MAX_ROBOTS,
-			"Purchase would exceed max supply"
-		);
-		require(msg.value == _mintPrice * toSend.length, "Invalid msg.value");
-
+	function mint(address[] memory toSend) public payable mintCompliance(toSend) {
 		// For each address, mint the NFT
 		for (uint i = 0; i < toSend.length; i++) {    
 			if (totalSupply() < MAX_ROBOTS) {
