@@ -25,7 +25,7 @@ contract VSWorldRobotz is
 
 	// init
 	address public _treasury;
-	bool public _openMint = false;	
+	bool public _openMint = false;
 	string public _baseTokenURI;
 	uint public _mintPrice;
 
@@ -68,11 +68,18 @@ contract VSWorldRobotz is
 		return ERC721.tokenURI(tokenId);
 	}
 
-	function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual override {
+	function _beforeTokenTransfer(
+		address from,
+		address to,
+		uint256 tokenId
+	) internal virtual override {
 		super._beforeTokenTransfer(from, to, tokenId);
 	}
 
-	function supportsInterface(bytes4 interfaceId) public view virtual override(AccessControlEnumerable, ERC721Enumerable) returns (bool) {
+	function supportsInterface(bytes4 interfaceId) public view virtual override(
+		AccessControlEnumerable,
+		ERC721Enumerable
+	) returns (bool) {
 		return super.supportsInterface(interfaceId);
 	}
 
@@ -126,7 +133,10 @@ contract VSWorldRobotz is
 	function mint(address[] memory toSend) public payable onlyOwner {
 		require(_openMint == true, "Minting closed");
 		require(toSend.length <= 20, "Can only mint 20 tokens at a time");
-		require(_tokenIdTracker.current() + toSend.length <= MAX_ROBOTS, "Purchase would exceed max supply");
+		require(
+			_tokenIdTracker.current() + toSend.length <= MAX_ROBOTS,
+			"Purchase would exceed max supply"
+		);
 		require(msg.value == _mintPrice * toSend.length, "Invalid msg.value");
 
 		// For each address, mint the NFT
@@ -139,7 +149,5 @@ contract VSWorldRobotz is
 				_tokenIdTracker.increment();
 			}
 		}
-
-		payable(_treasury).transfer(msg.value);
 	}
 }
