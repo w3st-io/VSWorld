@@ -58,9 +58,10 @@ contract VSWorldRobotz is
 		_setupRole(DEFAULT_ADMIN_ROLE, treasury);
 	}
 
+
 	/* [MODIFIERS] */
 	modifier mintCompliance(address[] memory toSend) {
-		require(tx.origin == msg.sender, "Wrong Caller");
+		require(tx.origin == msg.sender, "Caller must be an EOA");
 		require(_openMint == true, "Minting closed");
 		require(toSend.length <= 20, "Can only mint 20 tokens at a time");
 		require(msg.value == _mintPrice * toSend.length, "Invalid msg.value");
